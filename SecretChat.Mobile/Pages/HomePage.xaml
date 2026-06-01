@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:models="clr-namespace:SecretChat.Mobile.Models"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:HomeViewModel"
+    x:TypeArguments="vm:HomeViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid RowDefinitions="Auto, *" SafeAreaEdges="None">
+
+            <controls:Menu Grid.RowSpan="2" />
+
+            <controls:TopPanel
+                Grid.Row="0"
+                MiddleText="Secret Chat"
+                RightText="{x:Static icons:IconFont.More_vert}"
+                RightTextCommand="{Binding ShowMenuCommand}" />
+
+            <Border
+                Grid.Row="1"
+                Margin="10"
+                BackgroundColor="White"
+                Style="{StaticResource ThinPanelBaseStyle}"
+                VerticalOptions="Start"
+                ZIndex="10">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="*, *">
+
+                    <simpleButton:SimpleButton
+                        x:Name="AllChatsButton"
+                        Grid.Column="0"
+                        Margin="5"
+                        Clicked="AllChatsButton_Clicked"
+                        HorizontalOptions="Fill"
+                        StrokeShape="{RoundRectangle CornerRadius=20}"
+                        StrokeThickness="0"
+                        VerticalOptions="Fill">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="All chats"
+                            VerticalOptions="Center" />
+                    </simpleButton:SimpleButton>
+
+                    <simpleButton:SimpleButton
+                        x:Name="FavoriteButton"
+                        Grid.Column="1"
+                        Margin="5"
+                        Clicked="AllChatsButton_Clicked"
+                        HorizontalOptions="Fill"
+                        StrokeShape="{RoundRectangle CornerRadius=20}"
+                        StrokeThickness="0"
+                        VerticalOptions="Fill">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="Favourite"
+                            VerticalOptions="Center" />
+                    </simpleButton:SimpleButton>
+
+                </Grid>
+            </Border>
+
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Chats}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:CollectionViewItemChat}">
+                        <Grid
+                            Margin="10,0"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="10">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToChatPageCommand}" CommandParameter="{Binding Item}" />
+                            </Grid.GestureRecognizers>
+                            <Grid.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ItemIndex}"
+                                    TargetType="Grid"
+                                    Value="0">
+                                    <Setter Property="Margin" Value="10,60,10,0" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding IsLastItem}"
+                                    TargetType="Grid"
+                                    Value="True">
+                                    <Setter Property="Margin" Value="10,0,10,130" />
+                                </DataTrigger>
+                            </Grid.Triggers>
+                            <Grid.IsVisible>
+                                <MultiBinding Converter="{StaticResource FavoriteModeVisibilityConverter}">
+                                    <Binding Path="IsFavoriteChats" Source="{x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}" />
+                                    <Binding Path="Item.IsFavorite" />
+                                </MultiBinding>
+                            </Grid.IsVisible>
+
+                            <controls:UserImage Grid.Column="0" ImageSource="{Binding Item.WithUser.UserPhoto}" />
+
+                            <Grid
+                                Grid.Column="1"
+                                RowDefinitions="*, *"
+                                RowSpacing="5"
+                                VerticalOptions="Center">
+                                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                    <Label
+                                        Grid.Column="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding Item.WithUser.Name}" />
+                                    <Label
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        Text="{Binding LastMessageTime}"
+                                        TextColor="{StaticResource Gray500}" />
+                                </Grid>
+
+                                <Grid
+                                    Grid.Row="1"
+                                    ColumnDefinitions="*, Auto"
+                                    ColumnSpacing="10">
+                                    <Label
+                                        Grid.Column="0"
+                                        LineBreakMode="TailTruncation"
+                                        Text="{Binding Item.LastMessage.Content}"
+                                        TextColor="{StaticResource Gray600}" />
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="5,0"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        HeightRequest="20"
+                                        StrokeShape="RoundRectangle 10,10,10,10"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            Text="12"
+                                            TextColor="{StaticResource Primary}"
+                                            VerticalOptions="Center" />
+                                    </Border>
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Offset="0" Color="White" />
+                        <GradientStop Offset="0.1" Color="Transparent" />
+                        <GradientStop Offset="0.8" Color="Transparent" />
+                        <GradientStop Offset="1" Color="White" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+
+        </Grid>
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>

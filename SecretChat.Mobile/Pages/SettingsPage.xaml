@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:models="clr-namespace:SecretChat.Mobile.Models"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:SettingsViewModel"
+    x:TypeArguments="vm:SettingsViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid SafeAreaEdges="None" />
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>

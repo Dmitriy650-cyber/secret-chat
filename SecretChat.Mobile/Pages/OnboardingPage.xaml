@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SecretChat.Mobile.Pages.OnboardingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton">
+
+    <Grid RowDefinitions="1.5*,*">
+
+        <VerticalStackLayout
+            Margin="0,0,0,100"
+            Spacing="20"
+            VerticalOptions="End">
+
+            <Border
+                HeightRequest="150"
+                HorizontalOptions="Center"
+                StrokeShape="RoundRectangle 75,75,75,75"
+                StrokeThickness="0"
+                VerticalOptions="End"
+                WidthRequest="150">
+                <Image
+                    HeightRequest="150"
+                    Source="secret.png"
+                    WidthRequest="150" />
+            </Border>
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="28"
+                HorizontalOptions="Center"
+                Text="Secret Chat"
+                TextColor="{StaticResource Primary}"
+                VerticalOptions="End" />
+
+        </VerticalStackLayout>
+
+        <Grid
+            Grid.Row="1"
+            Padding="20,10"
+            RowDefinitions="*,Auto, *">
+
+            <VerticalStackLayout Grid.Row="1" Spacing="10">
+
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="Welcome to Secret Chat!"
+                    TextColor="{StaticResource Primary}" />
+
+                <Label
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
+                    Text="Your secure space for private and protected conversations. Communicate freely, trust only the secrets that stay between you." />
+
+            </VerticalStackLayout>
+
+            <simpleButton:SimpleButton
+                Grid.Row="2"
+                BackgroundColor="{StaticResource Secondary}"
+                Clicked="SimpleButton_Clicked"
+                HeightRequest="44"
+                StrokeShape="{RoundRectangle CornerRadius=22}"
+                VerticalOptions="End"
+                WidthRequest="150">
+                <Label
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Text="Get Started"
+                    VerticalOptions="Center" />
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </simpleButton:SimpleButton>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

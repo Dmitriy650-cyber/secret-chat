@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.ChatPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:messageDtos="clr-namespace:SecretChat.Shared.DTOs.MessageDTOs;assembly=SecretChat.Shared"
+    xmlns:models="clr-namespace:SecretChat.Mobile.Models"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:ChatViewModel"
+    x:TypeArguments="vm:ChatViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid RowDefinitions="Auto, *" SafeAreaEdges="None">
+
+            <controls:Menu Grid.RowSpan="2" />
+
+            <controls:TopPanel
+                Grid.Row="0"
+                LeftText="{Static icons:IconFont.Arrow_back}"
+                LeftTextCommand="{Binding GoBackCommand}"
+                MiddleText="{Binding User.Name}"
+                RightText="{x:Static icons:IconFont.More_vert}"
+                RightTextCommand="{Binding ShowMenuCommand}"
+                UserImage="{Binding User.UserPhoto}"
+                UserImageCommand="{Binding GoToDetailsPageCommand}" />
+
+            <CollectionView
+                Grid.Row="1"
+                BackgroundColor="{StaticResource PrimaryDark}"
+                ItemsSource="{Binding Messages}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.EmptyView>
+                    <Border
+                        Margin="40"
+                        BackgroundColor="White"
+                        HeightRequest="34"
+                        StrokeShape="RoundRectangle 17"
+                        StrokeThickness="0"
+                        VerticalOptions="Start">
+                        <Border.Shadow>
+                            <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+                        </Border.Shadow>
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="Send the first message!"
+                            VerticalOptions="Center" />
+                    </Border>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:CollectionViewItemMessage}">
+                        <Border
+                            Margin="10,3,10,0"
+                            Padding="10,5"
+                            BackgroundColor="{StaticResource Secondary}"
+                            HorizontalOptions="End"
+                            MaximumWidthRequest="350"
+                            StrokeShape="RoundRectangle 20,20,20,20"
+                            StrokeThickness="0">
+                            <Border.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsLastItem}"
+                                    TargetType="Border"
+                                    Value="True">
+                                    <Setter Property="Margin" Value="10,3,10,130" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding IsCurrentUser}"
+                                    TargetType="Border"
+                                    Value="False">
+                                    <Setter Property="HorizontalOptions" Value="Start" />
+                                    <Setter Property="BackgroundColor" Value="White" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Label Text="{Binding Item.Content}" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Border
+                x:Name="BottomPanel"
+                Grid.Row="1"
+                Margin="20,0,20,80"
+                BackgroundColor="White"
+                HorizontalOptions="Fill"
+                StrokeShape="RoundRectangle 20,20,20,20"
+                StrokeThickness="0"
+                VerticalOptions="End"
+                ZIndex="10">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="Auto, *, Auto, Auto">
+
+                    <simpleButton:SimpleButton
+                        Grid.Column="0"
+                        Margin="5"
+                        HeightRequest="30"
+                        StrokeThickness="0"
+                        VerticalOptions="End"
+                        WidthRequest="30">
+                        <Label
+                            FontSize="30"
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Edit}"
+                            TextColor="{StaticResource Gray500}"
+                            VerticalOptions="Center" />
+                    </simpleButton:SimpleButton>
+
+                    <controls:NoBorderEditor
+                        x:Name="MyEditor"
+                        Grid.Column="1"
+                        AutoSize="TextChanges"
+                        Text="{Binding Content}" />
+
+                    <simpleButton:SimpleButton
+                        Grid.Column="2"
+                        Margin="5"
+                        HeightRequest="30"
+                        StrokeThickness="0"
+                        VerticalOptions="End"
+                        WidthRequest="30">
+                        <Label
+                            FontSize="30"
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Attach_file}"
+                            TextColor="{StaticResource Gray500}"
+                            VerticalOptions="Center" />
+                    </simpleButton:SimpleButton>
+
+                    <simpleButton:SimpleButton
+                        Grid.Column="3"
+                        Margin="5"
+                        BackgroundColor="{StaticResource Primary}"
+                        Command="{Binding SendMessageCommand}"
+                        HeightRequest="30"
+                        StrokeShape="{RoundRectangle CornerRadius=15}"
+                        StrokeThickness="0"
+                        VerticalOptions="End"
+                        WidthRequest="30">
+                        <Label
+                            FontSize="26"
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Mic}"
+                            TextColor="White"
+                            VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShowMic}"
+                                    TargetType="Label"
+                                    Value="False">
+                                    <Setter Property="Text" Value="{Static icons:IconFont.Send}" />
+                                    <Setter Property="FontSize" Value="22" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </simpleButton:SimpleButton>
+
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Offset="0.8" Color="Transparent" />
+                        <GradientStop Offset="1" Color="{StaticResource PrimaryDark}" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+
+        </Grid>
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>

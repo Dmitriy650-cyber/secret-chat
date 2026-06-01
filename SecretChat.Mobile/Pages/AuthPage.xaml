@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.AuthPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:AuthViewModel"
+    x:TypeArguments="vm:AuthViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid RowDefinitions="*,Auto,*" SafeAreaEdges="None">
+
+            <Grid
+                Grid.Row="1"
+                Padding="20,10"
+                RowDefinitions="Auto,Auto,Auto"
+                RowSpacing="10">
+
+                <VerticalStackLayout
+                    Grid.Row="0"
+                    Margin="0,0,0,30"
+                    Spacing="20">
+
+                    <Border
+                        HeightRequest="150"
+                        HorizontalOptions="Center"
+                        StrokeShape="RoundRectangle 75,75,75,75"
+                        StrokeThickness="0"
+                        VerticalOptions="End"
+                        WidthRequest="150">
+                        <Image
+                            HeightRequest="150"
+                            Source="secret.png"
+                            WidthRequest="150" />
+                    </Border>
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="28"
+                        HorizontalOptions="Center"
+                        Text="Login"
+                        TextColor="{StaticResource Primary}"
+                        VerticalOptions="End">
+                        <Label.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsLoginMode}"
+                                TargetType="Label"
+                                Value="False">
+                                <Setter Property="Text" Value="Register" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                </VerticalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Row="1"
+                    Margin="0,0,0,30"
+                    Spacing="10">
+
+                    <Border
+                        Padding="10,0"
+                        BackgroundColor="{StaticResource Secondary}"
+                        HeightRequest="44"
+                        IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBooleanConverter}}"
+                        StrokeShape="RoundRectangle 22,22,22,22"
+                        StrokeThickness="0">
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                            <Label
+                                Grid.Column="0"
+                                HorizontalOptions="Center"
+                                Style="{StaticResource MaterialIcon}"
+                                Text="{Static icons:IconFont.Person}"
+                                VerticalOptions="Center" />
+                            <controls:NoBorderEntry
+                                Grid.Column="1"
+                                Placeholder="Name"
+                                Text="{Binding Name}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+
+                    <Border
+                        Padding="10,0"
+                        BackgroundColor="{StaticResource Secondary}"
+                        HeightRequest="44"
+                        StrokeShape="RoundRectangle 22,22,22,22"
+                        StrokeThickness="0">
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                            <Label
+                                Grid.Column="0"
+                                HorizontalOptions="Center"
+                                Style="{StaticResource MaterialIcon}"
+                                Text="{Static icons:IconFont.Email}"
+                                VerticalOptions="Center" />
+                            <controls:NoBorderEntry
+                                Grid.Column="1"
+                                Keyboard="Email"
+                                Placeholder="Email"
+                                Text="{Binding Email}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+
+                    <Border
+                        Padding="10,0"
+                        BackgroundColor="{StaticResource Secondary}"
+                        HeightRequest="44"
+                        StrokeShape="RoundRectangle 22,22,22,22"
+                        StrokeThickness="0">
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                            <Label
+                                Grid.Column="0"
+                                HorizontalOptions="Center"
+                                Style="{StaticResource MaterialIcon}"
+                                Text="{Static icons:IconFont.Password}"
+                                VerticalOptions="Center" />
+                            <controls:NoBorderEntry
+                                Grid.Column="1"
+                                Keyboard="Password"
+                                Placeholder="Password"
+                                Text="{Binding Password}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+
+                    <Border
+                        Padding="10,0"
+                        BackgroundColor="{StaticResource Secondary}"
+                        HeightRequest="44"
+                        IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBooleanConverter}}"
+                        StrokeShape="RoundRectangle 22,22,22,22"
+                        StrokeThickness="0">
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                            <Label
+                                Grid.Column="0"
+                                HorizontalOptions="Center"
+                                Style="{StaticResource MaterialIcon}"
+                                Text="{Static icons:IconFont.Phone}"
+                                VerticalOptions="Center" />
+                            <controls:NoBorderEntry
+                                Grid.Column="1"
+                                Keyboard="Telephone"
+                                Placeholder="Telephone number"
+                                Text="{Binding TelephoneNumber}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="2" Spacing="20">
+
+                    <simpleButton:SimpleButton
+                        BackgroundColor="{StaticResource Secondary}"
+                        Command="{Binding LoginRegisterCommand}"
+                        HeightRequest="44"
+                        StrokeShape="{RoundRectangle CornerRadius=22}"
+                        VerticalOptions="End"
+                        WidthRequest="150">
+                        <Label
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="Login"
+                            VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsLoginMode}"
+                                    TargetType="Label"
+                                    Value="False">
+                                    <Setter Property="Text" Value="Register" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup>
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="Background" Value="AliceBlue" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                    </simpleButton:SimpleButton>
+
+                    <Label HorizontalOptions="Center" Text="New user?">
+                        <Label.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsLoginMode}"
+                                TargetType="Label"
+                                Value="False">
+                                <Setter Property="Text" Value="Existing user?" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <simpleButton:SimpleButton
+                        BackgroundColor="{StaticResource Secondary}"
+                        Command="{Binding ChangeModeCommand}"
+                        HeightRequest="44"
+                        StrokeShape="{RoundRectangle CornerRadius=22}"
+                        VerticalOptions="End"
+                        WidthRequest="150">
+                        <Label
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="Register mode"
+                            VerticalOptions="Center">
+                            <Label.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsLoginMode}"
+                                    TargetType="Label"
+                                    Value="False">
+                                    <Setter Property="Text" Value="Login mode" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroupList>
+                                <VisualStateGroup>
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="Background" Value="AliceBlue" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </VisualStateManager.VisualStateGroups>
+                    </simpleButton:SimpleButton>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+        </Grid>
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>

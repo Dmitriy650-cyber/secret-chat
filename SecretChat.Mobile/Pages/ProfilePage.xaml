@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:photoDtos="clr-namespace:SecretChat.Shared.DTOs.PhotoDTOs;assembly=SecretChat.Shared"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:ProfileViewModel"
+    x:TypeArguments="vm:ProfileViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid RowDefinitions="400, *" SafeAreaEdges="None">
+
+            <CarouselView
+                Grid.Row="0"
+                BackgroundColor="{StaticResource Gray100}"
+                ItemsSource="{Binding Photos}"
+                PeekAreaInsets="0"
+                VerticalOptions="Fill">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type photoDtos:PhotoDto}">
+                        <Image
+                            Aspect="AspectFill"
+                            HeightRequest="400"
+                            HorizontalOptions="Fill"
+                            Source="{Binding PhotoUrl}"
+                            VerticalOptions="Fill" />
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
+            <controls:Menu Grid.RowSpan="2" />
+
+            <controls:TopPanel
+                Grid.Row="0"
+                BackgroundColor="Transparent"
+                LeftText="{Static icons:IconFont.Qr_code}"
+                LeftTextColor="White"
+                RightText="{Static icons:IconFont.More_vert}"
+                RightTextColor="White"
+                RightTextCommand="{Binding ShowMenuCommand}"
+                VerticalOptions="Start"
+                ZIndex="10" />
+
+            <FlexLayout
+                Grid.Row="0"
+                Margin="0,300,0,0"
+                JustifyContent="SpaceEvenly"
+                ZIndex="10">
+
+                <simpleButton:SimpleButton
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="{RoundRectangle CornerRadius=10}"
+                    WidthRequest="90">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Add_a_photo}" />
+                        <Label HorizontalOptions="Center" Text="Add photo" />
+                    </VerticalStackLayout>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Property="Background" Value="#E0E0E0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </simpleButton:SimpleButton>
+
+                <simpleButton:SimpleButton
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="{RoundRectangle CornerRadius=10}"
+                    WidthRequest="90">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Photo_camera}" />
+                        <Label HorizontalOptions="Center" Text="Set main" />
+                    </VerticalStackLayout>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Property="Background" Value="#E0E0E0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </simpleButton:SimpleButton>
+
+                <simpleButton:SimpleButton
+                    BackgroundColor="White"
+                    HeightRequest="55"
+                    StrokeShape="{RoundRectangle CornerRadius=10}"
+                    WidthRequest="90">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Delete}" />
+                        <Label HorizontalOptions="Center" Text="Delete" />
+                    </VerticalStackLayout>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Property="Background" Value="#E0E0E0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </simpleButton:SimpleButton>
+
+                <simpleButton:SimpleButton
+                    BackgroundColor="White"
+                    Command="{Binding GoToEditPageCommand}"
+                    HeightRequest="55"
+                    StrokeShape="{RoundRectangle CornerRadius=10}"
+                    WidthRequest="90">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label
+                            HorizontalOptions="Center"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Edit}" />
+                        <Label HorizontalOptions="Center" Text="Edit" />
+                    </VerticalStackLayout>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Property="Background" Value="#E0E0E0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </simpleButton:SimpleButton>
+
+            </FlexLayout>
+
+            <VerticalStackLayout Grid.Row="1" BackgroundColor="{StaticResource Gray100}">
+                <Border
+                    Margin="10"
+                    Padding="10"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 10,10,10,10"
+                    StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+                    </Border.Shadow>
+                    <Grid
+                        ColumnDefinitions="Auto,*"
+                        ColumnSpacing="10"
+                        RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                        RowSpacing="10">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="Id" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding User.Id}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Person_2}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding User.Name}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Email}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="{Binding User.Email}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Phone}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="{Binding User.Phone}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Book}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            LineBreakMode="WordWrap"
+                            Text="{Binding User.AboutMyself}"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>

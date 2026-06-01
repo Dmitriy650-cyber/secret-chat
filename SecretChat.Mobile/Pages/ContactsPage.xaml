@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.ContactsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:models="clr-namespace:SecretChat.Mobile.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:userDtos="clr-namespace:SecretChat.Shared.DTOs.UserDTOs;assembly=SecretChat.Shared"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:ContactsViewModel"
+    x:TypeArguments="vm:ContactsViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid RowDefinitions="Auto, *" SafeAreaEdges="None">
+
+            <controls:Menu Grid.RowSpan="2" />
+
+            <controls:TopPanel
+                Grid.Row="0"
+                MiddleText="Secret Chat"
+                RightText="{x:Static icons:IconFont.More_vert}"
+                RightTextCommand="{Binding ShowMenuCommand}" />
+
+            <Border
+                Grid.Row="1"
+                Margin="10"
+                BackgroundColor="White"
+                HeightRequest="40"
+                Style="{StaticResource StandartPanelBaseStyle}"
+                VerticalOptions="Start"
+                ZIndex="10">
+                <Border.Shadow>
+                    <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+                </Border.Shadow>
+                <Grid
+                    Padding="10,0"
+                    ColumnDefinitions="Auto, *"
+                    ColumnSpacing="10">
+
+                    <Label
+                        Grid.Column="0"
+                        Style="{StaticResource MaterialIcon}"
+                        Text="{Static icons:IconFont.Search}"
+                        TextColor="{StaticResource Primary}"
+                        VerticalOptions="Center" />
+
+                    <controls:NoBorderEntry
+                        Grid.Column="1"
+                        Margin="0,3,0,0"
+                        Placeholder="Search contacts"
+                        PlaceholderColor="{StaticResource PrimaryDark}"
+                        TextChanged="NoBorderEntry_TextChanged"
+                        TextColor="{StaticResource Primary}" />
+
+                </Grid>
+            </Border>
+
+            <!--  Contacts  -->
+
+            <CollectionView
+                Grid.Row="1"
+                IsGrouped="True"
+                IsVisible="{Binding IsSearchMode, Converter={StaticResource InverseBooleanConverter}}"
+                ItemsSource="{Binding Contacts}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="{x:Type models:CollectionViewGroupLoggedInUser}">
+                        <Label
+                            FontSize="16"
+                            Text="{Binding GroupTitle}"
+                            TextColor="{StaticResource Primary}">
+                            <Label.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ItemIndex}"
+                                    TargetType="Label"
+                                    Value="0">
+                                    <Setter Property="Margin" Value="10,60,10,0" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding IsLastItem}"
+                                    TargetType="Label"
+                                    Value="True">
+                                    <Setter Property="Margin" Value="10,0,10,130" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type userDtos:LoggedInUserDto}">
+                        <Grid
+                            Margin="10,0"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="10">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:ContactsViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding .}" />
+                            </Grid.GestureRecognizers>
+
+                            <controls:UserImage Grid.Column="0" ImageSource="{Binding UserPhoto}" />
+
+                            <Grid
+                                Grid.Column="1"
+                                RowDefinitions="*,*"
+                                RowSpacing="5"
+                                VerticalOptions="Center">
+
+                                <Label
+                                    Grid.Row="0"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    Text="{Binding Name}" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Text="{Binding Phone}"
+                                    TextColor="{StaticResource Gray500}" />
+
+                            </Grid>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!--  Searching contacts  -->
+
+            <CollectionView
+                Grid.Row="1"
+                IsVisible="{Binding IsSearchMode}"
+                ItemsSource="{Binding SortUsers}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:CollectionViewItemLoggedInUser}">
+                        <Grid
+                            Margin="10,0"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="10">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:ContactsViewModel}}, Path=GoToDetailsPageCommand}" CommandParameter="{Binding Item}" />
+                            </Grid.GestureRecognizers>
+                            <Grid.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ItemIndex}"
+                                    TargetType="Grid"
+                                    Value="0">
+                                    <Setter Property="Margin" Value="10,60,10,0" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding IsLastItem}"
+                                    TargetType="Grid"
+                                    Value="True">
+                                    <Setter Property="Margin" Value="10,0,10,130" />
+                                </DataTrigger>
+                            </Grid.Triggers>
+
+                            <controls:UserImage Grid.Column="0" ImageSource="{Binding Item.UserPhoto}" />
+
+                            <Grid
+                                Grid.Column="1"
+                                RowDefinitions="*,*"
+                                RowSpacing="5"
+                                VerticalOptions="Center">
+
+                                <Label
+                                    Grid.Row="0"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    Text="{Binding Item.Name}" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Text="{Binding Item.Phone}"
+                                    TextColor="{StaticResource Gray500}" />
+
+                            </Grid>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Grid Grid.Row="1">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Offset="0" Color="White" />
+                        <GradientStop Offset="0.1" Color="Transparent" />
+                        <GradientStop Offset="0.8" Color="Transparent" />
+                        <GradientStop Offset="1" Color="White" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+            </Grid>
+
+        </Grid>
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>

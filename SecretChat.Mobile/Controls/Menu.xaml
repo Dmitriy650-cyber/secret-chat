@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Grid
+    x:Class="SecretChat.Mobile.Controls.Menu"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    Padding="10,30"
+    BackgroundColor="Transparent"
+    ColumnDefinitions="*,*"
+    IsVisible="{Binding IsShowMenu}"
+    SafeAreaEdges="None"
+    ZIndex="15">
+    <Grid.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding CloseMenuCommand}" />
+    </Grid.GestureRecognizers>
+
+    <Border
+        Grid.Column="1"
+        BackgroundColor="White"
+        HorizontalOptions="Fill"
+        StrokeShape="RoundRectangle 10,10,10,10"
+        StrokeThickness="0"
+        VerticalOptions="Start">
+        <Border.Shadow>
+            <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+        </Border.Shadow>
+
+        <VerticalStackLayout Padding="5" Spacing="5">
+
+            <simpleButton:SimpleButton
+                Command="{Binding GoToSettingsPageCommand}"
+                HeightRequest="44"
+                HorizontalOptions="Fill"
+                StrokeThickness="0">
+                <HorizontalStackLayout Padding="5" Spacing="10">
+                    <Label
+                        Style="{StaticResource MaterialIcon}"
+                        Text="{Static icons:IconFont.Settings}"
+                        VerticalOptions="Center" />
+                    <Label
+                        FontSize="16"
+                        Text="Settings"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </simpleButton:SimpleButton>
+
+            <simpleButton:SimpleButton
+                Command="{Binding GoToHelpPageCommand}"
+                HeightRequest="44"
+                HorizontalOptions="Fill"
+                StrokeThickness="0">
+                <HorizontalStackLayout Padding="5" Spacing="10">
+                    <Label
+                        Style="{StaticResource MaterialIcon}"
+                        Text="{Static icons:IconFont.Help}"
+                        VerticalOptions="Center" />
+                    <Label
+                        FontSize="16"
+                        Text="Help"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </simpleButton:SimpleButton>
+
+            <simpleButton:SimpleButton
+                Command="{Binding LogoutCommand}"
+                HeightRequest="44"
+                HorizontalOptions="Fill"
+                StrokeThickness="0">
+                <HorizontalStackLayout Padding="5" Spacing="10">
+                    <Label
+                        Style="{StaticResource MaterialIcon}"
+                        Text="{Static icons:IconFont.Logout}"
+                        VerticalOptions="Center" />
+                    <Label
+                        FontSize="16"
+                        Text="Logout"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="AliceBlue" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </simpleButton:SimpleButton>
+
+        </VerticalStackLayout>
+
+    </Border>
+
+</Grid>

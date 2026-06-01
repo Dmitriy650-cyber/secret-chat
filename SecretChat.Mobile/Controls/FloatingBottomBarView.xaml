@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="SecretChat.Mobile.Controls.FloatingBottomBarView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    Margin="20,0,20,80"
+    HeightRequest="40"
+    HorizontalOptions="Fill"
+    VerticalOptions="End">
+
+    <Border
+        BackgroundColor="White"
+        StrokeShape="RoundRectangle 30,30,30,30"
+        StrokeThickness="0">
+        <Border.Shadow>
+            <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+        </Border.Shadow>
+        <Grid ColumnDefinitions="*, Auto, *">
+
+            <simpleButton:SimpleButton
+                x:Name="HomePageButton"
+                Grid.Column="0"
+                Margin="5"
+                Background="White"
+                Command="{Binding Source={x:RelativeSource AncestorType={x:Type ContentView}}, Path=ClickCommand}"
+                CommandParameter="HomePage"
+                HorizontalOptions="Fill"
+                StrokeShape="{RoundRectangle CornerRadius=20}"
+                StrokeThickness="0"
+                VerticalOptions="Fill">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Chats"
+                    VerticalOptions="Center" />
+            </simpleButton:SimpleButton>
+
+            <simpleButton:SimpleButton
+                x:Name="ProfilePageButton"
+                Grid.Column="1"
+                Margin="5"
+                Padding="10,0"
+                Background="White"
+                Command="{Binding Source={x:RelativeSource AncestorType={x:Type ContentView}}, Path=ClickCommand}"
+                CommandParameter="ProfilePage"
+                HorizontalOptions="Fill"
+                StrokeShape="{RoundRectangle CornerRadius=20}"
+                StrokeThickness="0"
+                VerticalOptions="Fill">
+                <Label
+                    FontSize="27"
+                    Style="{x:StaticResource MaterialIcon}"
+                    Text="{x:Static icons:IconFont.Person}"
+                    VerticalOptions="Center" />
+            </simpleButton:SimpleButton>
+
+            <simpleButton:SimpleButton
+                x:Name="ContactsPageButton"
+                Grid.Column="2"
+                Margin="5"
+                Background="White"
+                Command="{Binding Source={x:RelativeSource AncestorType={x:Type ContentView}}, Path=ClickCommand}"
+                CommandParameter="ContactsPage"
+                HorizontalOptions="Fill"
+                StrokeShape="{RoundRectangle CornerRadius=20}"
+                StrokeThickness="0"
+                VerticalOptions="Fill">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    Text="Contacts"
+                    VerticalOptions="Center" />
+            </simpleButton:SimpleButton>
+
+        </Grid>
+    </Border>
+
+</ContentView>

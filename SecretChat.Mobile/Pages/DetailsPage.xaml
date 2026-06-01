@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<basePage:BaseView
+    x:Class="SecretChat.Mobile.Pages.DetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:basePage="clr-namespace:SecretChat.Mobile.Pages.Base"
+    xmlns:controls="clr-namespace:SecretChat.Mobile.Controls"
+    xmlns:icons="clr-namespace:SecretChat.Mobile.Common.MaterialIcons"
+    xmlns:photoDtos="clr-namespace:SecretChat.Shared.DTOs.PhotoDTOs;assembly=SecretChat.Shared"
+    xmlns:simpleButton="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:vm="clr-namespace:SecretChat.Mobile.ViewModels"
+    x:DataType="vm:DetailsViewModel"
+    x:TypeArguments="vm:DetailsViewModel">
+
+    <basePage:BaseView.PageContent>
+
+        <Grid RowDefinitions="400, *" SafeAreaEdges="None">
+
+            <CarouselView
+                Grid.Row="0"
+                BackgroundColor="{StaticResource Gray100}"
+                ItemsSource="{Binding Photos}"
+                PeekAreaInsets="0"
+                VerticalOptions="Fill">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type photoDtos:PhotoDto}">
+                        <Image
+                            Aspect="AspectFill"
+                            HeightRequest="400"
+                            HorizontalOptions="Fill"
+                            Source="{Binding PhotoUrl}"
+                            VerticalOptions="Fill" />
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+
+            <controls:Menu Grid.RowSpan="2" />
+
+            <controls:TopPanel
+                Grid.Row="0"
+                BackgroundColor="Transparent"
+                LeftText="{Static icons:IconFont.Arrow_back}"
+                LeftTextColor="White"
+                LeftTextCommand="{Binding NewGoBackCommand}"
+                RightText="{Static icons:IconFont.More_vert}"
+                RightTextColor="White"
+                RightTextCommand="{Binding ShowMenuCommand}"
+                VerticalOptions="Start"
+                ZIndex="10" />
+
+            <VerticalStackLayout Grid.Row="1" BackgroundColor="{StaticResource Gray100}">
+                <Border
+                    Margin="10"
+                    Padding="10"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 10,10,10,10"
+                    StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource ShadowBrush}" Radius="3" />
+                    </Border.Shadow>
+                    <Grid
+                        ColumnDefinitions="Auto,*"
+                        ColumnSpacing="10"
+                        RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                        RowSpacing="10">
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="Id" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Text="{Binding User.Id}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Person_2}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding User.Name}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Email}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="{Binding User.Email}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Phone}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="{Binding User.Phone}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Style="{StaticResource MaterialIcon}"
+                            Text="{Static icons:IconFont.Book}"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            LineBreakMode="WordWrap"
+                            Text="{Binding User.AboutMyself}"
+                            VerticalOptions="Center" />
+                        <simpleButton:SimpleButton
+                            Grid.Row="5"
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="{StaticResource Secondary}"
+                            Command="{Binding AddOrDeleteContactCommand}"
+                            HeightRequest="30"
+                            StrokeShape="{RoundRectangle CornerRadius=10}"
+                            VerticalOptions="End">
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="Add to Contacts"
+                                VerticalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsUserConstact}"
+                                        TargetType="Label"
+                                        Value="True">
+                                        <Setter Property="Text" Value="Deleted from Contacts" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Property="Background" Value="AliceBlue" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                        </simpleButton:SimpleButton>
+                        <simpleButton:SimpleButton
+                            Grid.Row="6"
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="{StaticResource Secondary}"
+                            Command="{Binding CreateOrDeleteChatCommand}"
+                            HeightRequest="30"
+                            StrokeShape="{RoundRectangle CornerRadius=10}"
+                            VerticalOptions="End">
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="Start a Chat"
+                                VerticalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsHaveChat}"
+                                        TargetType="Label"
+                                        Value="True">
+                                        <Setter Property="Text" Value="Delete Chat" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroupList>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Property="Background" Value="AliceBlue" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateGroupList>
+                            </VisualStateManager.VisualStateGroups>
+                        </simpleButton:SimpleButton>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </basePage:BaseView.PageContent>
+
+</basePage:BaseView>
