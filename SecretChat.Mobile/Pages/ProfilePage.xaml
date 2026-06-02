@@ -21,6 +21,7 @@
                 BackgroundColor="{StaticResource Gray100}"
                 ItemsSource="{Binding Photos}"
                 PeekAreaInsets="0"
+                Position="{Binding SelectedIndex, Mode=TwoWay}"
                 VerticalOptions="Fill">
                 <CarouselView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type photoDtos:PhotoDto}">
@@ -55,6 +56,7 @@
 
                 <simpleButton:SimpleButton
                     BackgroundColor="White"
+                    Command="{Binding AddPhotoCommand}"
                     HeightRequest="55"
                     StrokeShape="{RoundRectangle CornerRadius=10}"
                     WidthRequest="90">
@@ -81,6 +83,7 @@
 
                 <simpleButton:SimpleButton
                     BackgroundColor="White"
+                    Command="{Binding SetMainPhotoCommand}"
                     HeightRequest="55"
                     StrokeShape="{RoundRectangle CornerRadius=10}"
                     WidthRequest="90">
@@ -107,6 +110,7 @@
 
                 <simpleButton:SimpleButton
                     BackgroundColor="White"
+                    Command="{Binding DeletePhotoCommand}"
                     HeightRequest="55"
                     StrokeShape="{RoundRectangle CornerRadius=10}"
                     WidthRequest="90">

@@ -28,6 +28,7 @@
 				return await service.AddUserPhotoAsync(photo, principal.GetUserId());
 			})
 				.Produces<ApiResult<PhotoDto>>()
+				.DisableAntiforgery()
 				.WithName("AddUserPhoto");
 
 			photoGroup.MapDelete("/{photoId:int}", async (int photoId, IPhotoService service) =>

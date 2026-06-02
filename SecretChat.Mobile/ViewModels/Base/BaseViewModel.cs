@@ -86,6 +86,8 @@
 		[RelayCommand]
 		private async Task LogoutAsync()
 		{
+			IsShowMenu = false;
+
 			AuthService.Logout();
 
 			await NavigateAsync(nameof(AuthPage));
@@ -164,6 +166,68 @@
 			ErrorText = message;
 			ErrorImage = imageUrl;
 			IsErrorState = true;
+		}
+
+		protected async Task<string?> ChoosePhotoAsync()
+		{
+			try
+			{
+				if (MediaPicker.Default.IsCaptureSupported)
+				{
+					const string PickFromDevice = "Pick from Device";
+					const string CapturePhoto = "Capture Photo";
+
+					var result = await Shell.Current
+						.DisplayActionSheetAsync("Choose photo", "Cancel", null, PickFromDevice, CapturePhoto);
+					if (string.IsNullOrWhiteSpace(result))
+						return null;
+
+					switch (result)
+					{
+						case PickFromDevice:
+							return await PickFromDeviceAsync();
+						case CapturePhoto:
+							return await CapturePhotoAsync();
+					}
+
+					async Task<string?> PickFromDeviceAsync()
+					{
+						var photoResults = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions
+						{
+							Title = "Select Photo"
+						});
+						if (photoResults?.FirstOrDefault() is not FileResult fileResult)
+						{
+							await ShowToastAsync("No photo selected");
+							return null;
+						}
+						return fileResult.FullPath;
+					}
+					async Task<string?> CapturePhotoAsync()
+					{
+						FileResult? fileResult = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions
+						{
+							Title = "Take Photo"
+						});
+						if (fileResult is null)
+						{
+							await ShowToastAsync("No photo captured");
+							return null;
+						}
+						return fileResult.FullPath;
+					}
+				}
+
+				await ShowToastAsync("Capture is not supported");
+
+				return null;
+			}
+			catch (Exception e)
+			{
+				await ShowErrorAlertAsync(e.Message);
+
+				return null;
+			}
 		}
 	}
 }

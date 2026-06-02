@@ -15,7 +15,7 @@
 			var newFileName = $"{Guid.NewGuid()}_{DateTime.UtcNow.Ticks}{extension}";
 			var filePath = Path.Combine(targerPath, newFileName);
 
-			FileStream fs = File.Create(filePath);
+			using FileStream fs = File.Create(filePath);
 			await file.CopyToAsync(fs);
 
 			var domainUrl = configuration.GetValue<string>("Domain")!.TrimEnd('/');
