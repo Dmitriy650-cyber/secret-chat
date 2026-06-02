@@ -6,6 +6,7 @@
 		protected TViewModel ViewModel { get; set; } = null!;
 
 		protected event EventHandler ViewModelInitializedAction = null!;
+		protected event EventHandler ViewModelDisappearingAction = null!;
 
 		protected override async void OnAppearing()
 		{
@@ -21,6 +22,12 @@
 
 				_isPageLoaded = true;
 			}
+		}
+
+		protected override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			ViewModelDisappearingAction?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

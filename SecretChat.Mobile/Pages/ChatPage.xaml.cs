@@ -6,6 +6,12 @@ public partial class ChatPage : BaseView<ChatViewModel>
 	{
 		InitializeComponent();
 		ViewModelInitializedAction += InitializeAction;
+		ViewModelDisappearingAction += DisappearingAction;
+	}
+
+	private void DisappearingAction(object? sender, EventArgs e)
+	{
+		ViewModel.RemoveHandlers();
 	}
 
 	private void InitializeAction(object? sender, EventArgs e)

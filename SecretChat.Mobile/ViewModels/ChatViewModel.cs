@@ -178,6 +178,15 @@
 		{
 			realtimeUpdateService.AddMessageSentHandler(nameof(ChatViewModel), OnMessageSent);
 			realtimeUpdateService.AddMessageDeletedHandler(nameof(ChatViewModel), OnMessageDeleted);
+			realtimeUpdateService.AddUserCreatedOrUpdatedHandler(nameof(ChatViewModel), OnUserCreatedOrUpdated);
+		}
+
+		private void OnUserCreatedOrUpdated(LoggedInUserDto dto)
+		{
+			if (dto.Id == User!.Id)
+			{
+				User = dto;
+			}
 		}
 
 		private void OnMessageDeleted(int id)
@@ -226,6 +235,11 @@
 			{
 				await ShowErrorAlertAsync(ex.Message);
 			}
+		}
+
+		public void RemoveHandlers()
+		{
+			realtimeUpdateService.RemoveHandlers(nameof(ChatViewModel));
 		}
 	}
 }

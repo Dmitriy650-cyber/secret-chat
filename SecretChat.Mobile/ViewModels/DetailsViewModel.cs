@@ -1,8 +1,6 @@
-﻿using SecretChat.Mobile.Services.CryptographicServices;
-
-namespace SecretChat.Mobile.ViewModels
+﻿namespace SecretChat.Mobile.ViewModels
 {
-    public partial class DetailsViewModel(IConnectivity connectivity, IPhotoApi photoApi, IUserApi userApi, IChatApi chatApi, AuthService authService) : BaseViewModel(connectivity, authService)
+    public partial class DetailsViewModel(IConnectivity connectivity, IPhotoApi photoApi, IUserApi userApi, IChatApi chatApi, AuthService authService, RealtimeUpdateService realtimeUpdateService) : BaseViewModel(connectivity, authService)
     {
 		[ObservableProperty]
 		private LoggedInUserDto? _user;
@@ -139,6 +137,24 @@ namespace SecretChat.Mobile.ViewModels
 
 				IsHaveChat = !IsHaveChat;
 			});
+		}
+
+		public void ConfigureRealtimeUpdates()
+		{
+			realtimeUpdateService.AddUserCreatedOrUpdatedHandler(nameof(DetailsViewModel), OnUserCreatedOrUpdated);
+		}
+
+		private void OnUserCreatedOrUpdated(LoggedInUserDto dto)
+		{
+			if (User!.Id == dto.Id)
+			{
+				User = dto;
+			}
+		}
+
+		public void RemoveHandlers()
+		{
+			realtimeUpdateService.RemoveHandlers(nameof(DetailsViewModel));
 		}
 	}
 }

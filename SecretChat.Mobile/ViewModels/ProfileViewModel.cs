@@ -1,6 +1,6 @@
 ﻿namespace SecretChat.Mobile.ViewModels
 {
-	public partial class ProfileViewModel(IConnectivity connectivity, AuthService authService, IPhotoApi photoApi) : BaseViewModel(connectivity, authService)
+	public partial class ProfileViewModel(IConnectivity connectivity, AuthService authService, IPhotoApi photoApi, RealtimeUpdateService realtimeUpdateService) : BaseViewModel(connectivity, authService)
 	{
 		[ObservableProperty]
 		private LoggedInUserDto _user = authService.User!;
@@ -133,6 +133,19 @@
 			return SelectedIndex >= 0
 				&& SelectedIndex < Photos.Count
 				&& Photos[SelectedIndex].Id != 0;
+		}
+
+		public void ConfigureRealtimeUpdates()
+		{
+			realtimeUpdateService.AddUserCreatedOrUpdatedHandler(nameof(ProfileViewModel), OnUserCreatedOrUpdated);
+		}
+
+		private void OnUserCreatedOrUpdated(LoggedInUserDto dto)
+		{
+			if (dto.Id == AuthService.User!.Id)
+			{
+				User = dto;
+			}
 		}
 	}
 }

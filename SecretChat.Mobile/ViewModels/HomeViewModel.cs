@@ -65,6 +65,17 @@
 			realtimeUpdateService.AddChatCreatedHandler(nameof(HomeViewModel), OnChatCreated);
 			realtimeUpdateService.AddChatDeletedHandler(nameof(HomeViewModel), OnChatDeleted);
 			realtimeUpdateService.AddMessageSentHandler(nameof(HomeViewModel), OnMessageSent);
+			realtimeUpdateService.AddUserCreatedOrUpdatedHandler(nameof(HomeViewModel), OnUserCreatedOrUpdated);
+		}
+
+		private void OnUserCreatedOrUpdated(LoggedInUserDto dto)
+		{
+			var chat = _allChats.FirstOrDefault(n => n.WithUser.Id == dto.Id);
+			if (chat is not null)
+			{
+				chat.WithUser = dto;
+				RefreshChats();
+			}
 		}
 
 		private void OnMessageSent(MessageDto dto)

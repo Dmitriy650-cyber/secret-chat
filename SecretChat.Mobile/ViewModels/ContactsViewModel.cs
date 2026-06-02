@@ -250,6 +250,13 @@
 				return;
 
 			_allUsers.Remove(user);
+
+			var userContact = _userContacts.FirstOrDefault(n => n.Id == id);
+			if (userContact is not null)
+			{
+				_userContacts.Remove(userContact);
+				RefreshContacts(_userContacts);
+			}
 		}
 
 		private void OnUserCreatedOrUpdated(LoggedInUserDto dto)
@@ -261,6 +268,14 @@
 			}
 
 			_allUsers.Add(dto);
+
+			var userContact = _userContacts.FirstOrDefault(n => n.Id == dto.Id);
+			if (userContact is not null)
+			{
+				_userContacts.Remove(userContact);
+				_userContacts.Add(dto);
+				RefreshContacts(_userContacts);
+			}
 		}
 	}
 }
