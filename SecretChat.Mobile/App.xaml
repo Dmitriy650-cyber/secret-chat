@@ -14,6 +14,7 @@
 
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <converters:FavoriteModeVisibilityConverter x:Key="FavoriteModeVisibilityConverter" />
+            <converters:FavoriteToColorConverter x:Key="FavoriteToColorConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

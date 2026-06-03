@@ -73,86 +73,99 @@
                 </Grid>
             </Border>
 
-            <CollectionView Grid.Row="1" ItemsSource="{Binding Chats}">
+            <CollectionView Grid.Row="1" ItemsSource="{Binding CurrentChats}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="20" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:CollectionViewItemChat}">
-                        <Grid
-                            Margin="10,0"
-                            ColumnDefinitions="Auto, *"
-                            ColumnSpacing="10">
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToChatPageCommand}" CommandParameter="{Binding Item}" />
-                            </Grid.GestureRecognizers>
-                            <Grid.Triggers>
+                        <SwipeView>
+                            <SwipeView.Triggers>
                                 <DataTrigger
                                     Binding="{Binding ItemIndex}"
-                                    TargetType="Grid"
+                                    TargetType="SwipeView"
                                     Value="0">
                                     <Setter Property="Margin" Value="10,60,10,0" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsLastItem}"
-                                    TargetType="Grid"
+                                    TargetType="SwipeView"
                                     Value="True">
                                     <Setter Property="Margin" Value="10,0,10,130" />
                                 </DataTrigger>
-                            </Grid.Triggers>
-                            <Grid.IsVisible>
-                                <MultiBinding Converter="{StaticResource FavoriteModeVisibilityConverter}">
-                                    <Binding Path="IsFavoriteChats" Source="{x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}" />
-                                    <Binding Path="Item.IsFavorite" />
-                                </MultiBinding>
-                            </Grid.IsVisible>
-
-                            <controls:UserImage Grid.Column="0" ImageSource="{Binding Item.WithUser.UserPhoto}" />
-
-                            <Grid
-                                Grid.Column="1"
-                                RowDefinitions="*, *"
-                                RowSpacing="5"
-                                VerticalOptions="Center">
-                                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
-                                    <Label
-                                        Grid.Column="0"
-                                        FontAttributes="Bold"
-                                        FontSize="16"
-                                        Text="{Binding Item.WithUser.Name}" />
-                                    <Label
-                                        Grid.Column="1"
-                                        HorizontalOptions="End"
-                                        Text="{Binding LastMessageTime}"
-                                        TextColor="{StaticResource Gray500}" />
-                                </Grid>
-
-                                <Grid
-                                    Grid.Row="1"
-                                    ColumnDefinitions="*, Auto"
-                                    ColumnSpacing="10">
-                                    <Label
-                                        Grid.Column="0"
-                                        LineBreakMode="TailTruncation"
-                                        Text="{Binding Item.LastMessage.Content}"
-                                        TextColor="{StaticResource Gray600}" />
+                            </SwipeView.Triggers>
+                            <SwipeView.RightItems>
+                                <SwipeItemView Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=MakeChatFavoriteCommand}" CommandParameter="{Binding Item}">
                                     <Border
-                                        Grid.Column="1"
-                                        Padding="5,0"
+                                        Margin="10,3"
+                                        Padding="10"
                                         BackgroundColor="{StaticResource Secondary}"
-                                        HeightRequest="20"
                                         StrokeShape="RoundRectangle 10,10,10,10"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Center">
+                                        StrokeThickness="0">
                                         <Label
-                                            Text="12"
-                                            TextColor="{StaticResource Primary}"
+                                            HorizontalOptions="Center"
+                                            Style="{StaticResource MaterialIcon}"
+                                            Text="{Static icons:IconFont.Favorite}"
+                                            TextColor="{Binding Item.IsFavorite, Converter={StaticResource FavoriteToColorConverter}}"
                                             VerticalOptions="Center" />
                                     </Border>
-                                </Grid>
+                                </SwipeItemView>
+                            </SwipeView.RightItems>
+                            <Grid
+                                Margin="10,0"
+                                ColumnDefinitions="Auto, *"
+                                ColumnSpacing="10">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=GoToChatPageCommand}" CommandParameter="{Binding Item}" />
+                                </Grid.GestureRecognizers>
 
+                                <controls:UserImage Grid.Column="0" ImageSource="{Binding Item.WithUser.UserPhoto}" />
+
+                                <Grid
+                                    Grid.Column="1"
+                                    RowDefinitions="*, *"
+                                    RowSpacing="5"
+                                    VerticalOptions="Center">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                        <Label
+                                            Grid.Column="0"
+                                            FontAttributes="Bold"
+                                            FontSize="16"
+                                            Text="{Binding Item.WithUser.Name}" />
+                                        <Label
+                                            Grid.Column="1"
+                                            HorizontalOptions="End"
+                                            Text="{Binding LastMessageTime}"
+                                            TextColor="{StaticResource Gray500}" />
+                                    </Grid>
+
+                                    <Grid
+                                        Grid.Row="1"
+                                        ColumnDefinitions="*, Auto"
+                                        ColumnSpacing="10">
+                                        <Label
+                                            Grid.Column="0"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Item.LastMessage.Content}"
+                                            TextColor="{StaticResource Gray600}" />
+                                        <Border
+                                            Grid.Column="1"
+                                            Padding="5,0"
+                                            BackgroundColor="{StaticResource Secondary}"
+                                            HeightRequest="20"
+                                            StrokeShape="RoundRectangle 10,10,10,10"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                            <Label
+                                                Text="12"
+                                                TextColor="{StaticResource Primary}"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                    </Grid>
+
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </SwipeView>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

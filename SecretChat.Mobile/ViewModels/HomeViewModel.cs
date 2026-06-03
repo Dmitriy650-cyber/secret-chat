@@ -3,10 +3,26 @@
 	public partial class HomeViewModel(IConnectivity connectivity, IChatApi chatApi, RealtimeUpdateService realtimeUpdateService, AuthService authService) : BaseViewModel(connectivity, authService)
 	{
 		public ObservableCollection<CollectionViewItemChat> Chats { get; set; } = [];
+		public ObservableCollection<CollectionViewItemChat> FavoriteChats { get; set; } = [];
+		public ObservableCollection<CollectionViewItemChat> CurrentChats { get; set; } = [];
 		private ObservableCollection<ChatDto> _allChats { get; set; } = [];
 
 		[ObservableProperty]
-		private bool _isFavoriteChats = false;
+		private bool _isFavoriteChats = true;
+
+		partial void OnIsFavoriteChatsChanged(bool value)
+		{
+			CurrentChats.Clear();
+
+			if (value)
+			{
+				CurrentChats.AddRange(FavoriteChats);
+			}
+			else
+			{
+				CurrentChats.AddRange(Chats);
+			}
+		}
 
 		public override async Task InitializeViewModel()
 		{
@@ -39,6 +55,53 @@
 			});
 		}
 
+		[RelayCommand]
+		private async Task MakeChatFavoriteAsync(ChatDto dto)
+		{
+			if (dto.IsFavorite)
+			{
+				await MakeApiRequestAsync(async () =>
+				{
+					var response = await chatApi.RemoveChatFromFavoritesAsync(dto.Id);
+
+					if (!response.IsSuccess)
+					{
+						await ShowErrorAlertAsync(response.Message);
+						return;
+					}
+
+					var chat = _allChats.FirstOrDefault(n => n.Id == dto.Id);
+					if (chat is { })
+					{
+						chat.IsFavorite = false;
+					}
+					RefreshChats();
+					await ShowToastAsync("Chat removed from favorites");
+				});
+			}
+			else
+			{
+				await MakeApiRequestAsync(async () =>
+				{
+					var respone = await chatApi.MakeChatFavoriteAsync(dto.Id);
+
+					if (!respone.IsSuccess)
+					{
+						await ShowErrorAlertAsync(respone.Message);
+						return;
+					}
+
+					var chat = _allChats.FirstOrDefault(n => n.Id == dto.Id);
+					if (chat is { })
+					{
+						chat.IsFavorite = true;
+					}
+					RefreshChats();
+					await ShowToastAsync("Chat added to favorites");
+				});
+			}
+		}
+
 		private void RefreshChats()
 		{
 			Chats.Clear();
@@ -52,6 +115,20 @@
 				ItemIndex = index,
 				ItemCount = count
 			}));
+
+			FavoriteChats.Clear();
+
+			var favoriteChats = _allChats.Where(n => n.IsFavorite == true).OrderByDescending(n => n.LastMessage?.SendOn);
+			var countFavoriteChats = favoriteChats.Count();
+
+			FavoriteChats.AddRange(favoriteChats.Select((item, index) => new CollectionViewItemChat
+			{
+				Item = item,
+				ItemIndex = index,
+				ItemCount = countFavoriteChats
+			}));
+
+			OnIsFavoriteChatsChanged(IsFavoriteChats);
 		}
 
 		public bool IsItInTheChat(LoggedInUserDto dto) =>

@@ -41,6 +41,7 @@
                         Margin="40"
                         BackgroundColor="White"
                         HeightRequest="34"
+                        IsVisible="{Binding IsShowContent}"
                         StrokeShape="RoundRectangle 17"
                         StrokeThickness="0"
                         VerticalOptions="Start">
