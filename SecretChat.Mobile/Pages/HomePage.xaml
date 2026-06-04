@@ -156,8 +156,16 @@
                                             StrokeShape="RoundRectangle 10,10,10,10"
                                             StrokeThickness="0"
                                             VerticalOptions="Center">
+                                            <Border.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding Item.CountMessagesThatHaveNotBeenRead}"
+                                                    TargetType="Border"
+                                                    Value="0">
+                                                    <Setter Property="IsVisible" Value="False" />
+                                                </DataTrigger>
+                                            </Border.Triggers>
                                             <Label
-                                                Text="12"
+                                                Text="{Binding Item.CountMessagesThatHaveNotBeenRead}"
                                                 TextColor="{StaticResource Primary}"
                                                 VerticalOptions="Center" />
                                         </Border>

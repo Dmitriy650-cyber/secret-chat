@@ -9,9 +9,9 @@
 				.RequireAuthorization()
 				.WithTags("Message");
 
-			messageGroup.MapGet("/{chatId:int}", async (int chatId, IMessageService service) =>
+			messageGroup.MapGet("/{chatId:int}", async (int chatId, IMessageService service, ClaimsPrincipal principal) =>
 			{
-				return await service.GetChatMessagesAsync(chatId);
+				return await service.GetChatMessagesAsync(chatId, principal.GetUserId());
 			})
 				.Produces<ApiResult<IEnumerable<MessageDto>>>()
 				.WithName("GetChatMessages");

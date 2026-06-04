@@ -8,6 +8,7 @@
 			DateTime SendOn,
 			DateTime? ModifiedOn,
 			int UserId,
-			int ChatId
+			int ChatId,
+			bool WasReaded
 		);
 }

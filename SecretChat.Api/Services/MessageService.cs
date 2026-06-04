@@ -2,14 +2,20 @@
 {
 	public class MessageService(DataContext context, FileUploadingService fileUploadingService, IMapper mapper, IHubContext<SecretChatHub, ISecretChatHubClient> hubContext) : IMessageService
 	{
-		public async Task<ApiResult<IEnumerable<MessageDto>>> GetChatMessagesAsync(int chatId)
+		public async Task<ApiResult<IEnumerable<MessageDto>>> GetChatMessagesAsync(int chatId, int userId)
 		{
 			try
 			{
-				var messages = mapper.Map<IEnumerable<MessageDto>>(
-					await context.Messages.Where(n => n.ChatId == chatId).ToArrayAsync());
+				var messages = await context.Messages.Where(n => n.ChatId == chatId).ToArrayAsync();
 
-				return ApiResult<IEnumerable<MessageDto>>.Success(messages);
+				foreach(var message in messages.Where(n => n.WasReaded == false && n.UserId != userId))
+				{
+					message.WasReaded = true;
+				}
+
+				await context.SaveChangesAsync();
+
+				return ApiResult<IEnumerable<MessageDto>>.Success(mapper.Map<IEnumerable<MessageDto>>(messages));
 			}
 			catch (Exception ex)
 			{

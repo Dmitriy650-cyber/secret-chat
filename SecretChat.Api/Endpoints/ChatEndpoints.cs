@@ -51,6 +51,13 @@
 				.Produces<ApiResult>()
 				.WithName("RemoveChatFromFavorites");
 
+			chatGroup.MapPut("/make-messages-readed/{chatId:int}", async (int chatId, IChatService service, ClaimsPrincipal principal) =>
+			{
+				return await service.MakeMessagesReadedAsync(chatId, principal.GetUserId());
+			})
+				.Produces<ApiResult>()
+				.WithName("MakeMessagesReaded");
+
 			return builder;
 		}
 	}

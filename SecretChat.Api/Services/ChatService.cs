@@ -10,6 +10,7 @@
 					.Where(n => n.FirstUserId == userId || n.SecondUserId == userId)
 					.Include(n => n.FirstUser)
 					.Include(n => n.SecondUser)
+					.Include(n => n.Messages)
 					.ToListAsync();
 
 				List<ChatDto> chatsDtos = [];
@@ -34,8 +35,13 @@
 					var lastMessage = chat.LastMessageId is { } ? await context.Messages
 						.AsNoTracking()
 						.FirstOrDefaultAsync(n => n.Id == chat.LastMessageId) : null;
+					var countMessagesThatHaveNotBeenRead = chat.Messages.Where(n => n.WasReaded == false && n.UserId != userId).Count();
 					var lastMessageDto = mapper.Map<MessageDto>(lastMessage);
-					var chatDto = new ChatDto(chat.Id, chat.CreatedAt, user, withUser, isFavorite) { LastMessage = lastMessageDto };
+					var chatDto = new ChatDto(chat.Id, chat.CreatedAt, user, withUser, isFavorite) 
+					{ 
+						LastMessage = lastMessageDto,
+						CountMessagesThatHaveNotBeenRead = countMessagesThatHaveNotBeenRead
+					};
 					chatsDtos.Add(chatDto);
 				}
 
@@ -44,6 +50,29 @@
 			catch (Exception ex)
 			{
 				return ApiResult<IEnumerable<ChatDto>>.Fail(ex.Message);
+			}
+		}
+
+		public async Task<ApiResult> MakeMessagesReadedAsync(int chatId, int userId)
+		{
+			try
+			{
+				var messages = await context.Messages
+					.Where(n => n.ChatId == chatId && n.UserId != userId && n.WasReaded == false)
+					.ToArrayAsync();
+
+				foreach(var message in messages)
+				{
+					message.WasReaded = true;
+				}
+
+				await context.SaveChangesAsync();
+
+				return ApiResult.Success();
+			}
+			catch (Exception ex)
+			{
+				return ApiResult.Fail(ex.Message);
 			}
 		}
 

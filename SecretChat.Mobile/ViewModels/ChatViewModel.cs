@@ -1,6 +1,6 @@
 ﻿namespace SecretChat.Mobile.ViewModels
 {
-    public partial class ChatViewModel(IConnectivity connectivity, IMessageApi messageApi, IUserApi userApi, AuthService authService, RealtimeUpdateService realtimeUpdateService) : BaseViewModel(connectivity, authService)
+    public partial class ChatViewModel(IConnectivity connectivity, IMessageApi messageApi, IUserApi userApi, IChatApi chatApi, AuthService authService, RealtimeUpdateService realtimeUpdateService) : BaseViewModel(connectivity, authService)
     {
 		private byte[] _chatKey = null!;
 
@@ -114,7 +114,25 @@
 		private void GoBackHandler(object? sender, EventArgs e)
 		{
 			realtimeUpdateService.RemoveHandlers(nameof(ChatViewModel));
+			MakeMessagesReaded();
 			GoBackAction -= GoBackHandler;
+		}
+
+		public void MakeMessagesReaded()
+		{
+			_ = MakeApiRequestAsync(async () =>
+			{
+				var response = await chatApi.MakeMessagesReadedAsync(Chat!.Id);
+
+				if (!response.IsSuccess)
+				{
+					await ShowErrorAlertAsync(response.Message);
+					return;
+				}
+			});
+
+			var homeViewModel = ServiceHelper.GetService<HomeViewModel>();
+			homeViewModel!.MakeChatReaded(Chat!.Id);
 		}
 
 		private async void Receive(FromHomeToChatMessage message)

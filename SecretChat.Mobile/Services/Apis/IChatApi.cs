@@ -20,5 +20,8 @@
 
 		[Put("/api/chat/remove-chat-from-favorites/{chatId}")]
 		Task<ApiResult> RemoveChatFromFavoritesAsync(int chatId);
+
+		[Put("/api/chat/make-messages-readed/{chatId}")]
+		Task<ApiResult> MakeMessagesReadedAsync(int chatId);
 	}
 }

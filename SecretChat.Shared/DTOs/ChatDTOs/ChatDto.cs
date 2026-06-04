@@ -8,6 +8,7 @@
 		public LoggedInUserDto WithUser { get; set; } = null!;
 		public bool IsFavorite { get; set; }
 		public MessageDto? LastMessage { get; set; }
+		public int CountMessagesThatHaveNotBeenRead { get; set; }
 
 		public ChatDto(int id, DateTime createdAt, LoggedInUserDto user, LoggedInUserDto withUser, bool isFavorite)
 		{

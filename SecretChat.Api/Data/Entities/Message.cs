@@ -10,6 +10,7 @@
 		public string? FileUrl { get; set; }
 		public DateTime SendOn { get; set; }
 		public DateTime? ModifiedOn { get; set; }
+		public bool WasReaded { get; set; }
 
 		public User? User { get; set; }
 		public int? UserId { get; set; }

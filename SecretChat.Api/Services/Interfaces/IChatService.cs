@@ -3,6 +3,7 @@
 	public interface IChatService
 	{
 		Task<ApiResult<ChatDto>> CreateChatAsync(CreatableChatDto dto);
+		Task<ApiResult> MakeMessagesReadedAsync(int chatId, int userId);
 		Task<ApiResult> DeleteChatAsync(int chatId);
 		Task<ApiResult<IEnumerable<ChatDto>>> GetUserChatsAsync(int userId);
 		Task<ApiResult<ChatDto>> GetChatByUserIdAsync(int id, int userId);

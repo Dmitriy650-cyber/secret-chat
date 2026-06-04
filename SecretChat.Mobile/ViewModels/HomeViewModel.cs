@@ -2,9 +2,9 @@
 {
 	public partial class HomeViewModel(IConnectivity connectivity, IChatApi chatApi, RealtimeUpdateService realtimeUpdateService, AuthService authService) : BaseViewModel(connectivity, authService)
 	{
-		public ObservableCollection<CollectionViewItemChat> Chats { get; set; } = [];
-		public ObservableCollection<CollectionViewItemChat> FavoriteChats { get; set; } = [];
 		public ObservableCollection<CollectionViewItemChat> CurrentChats { get; set; } = [];
+		private ObservableCollection<CollectionViewItemChat> _chats { get; set; } = [];
+		private ObservableCollection<CollectionViewItemChat> _favoriteChats { get; set; } = [];
 		private ObservableCollection<ChatDto> _allChats { get; set; } = [];
 
 		[ObservableProperty]
@@ -16,11 +16,11 @@
 
 			if (value)
 			{
-				CurrentChats.AddRange(FavoriteChats);
+				CurrentChats.AddRange(_favoriteChats);
 			}
 			else
 			{
-				CurrentChats.AddRange(Chats);
+				CurrentChats.AddRange(_chats);
 			}
 		}
 
@@ -104,35 +104,45 @@
 
 		private void RefreshChats()
 		{
-			Chats.Clear();
+			_chats.Clear();
 
 			var chats = _allChats.OrderByDescending(n => n.LastMessage?.SendOn);
 			var count = chats.Count();
 
-			Chats.AddRange(chats.Select((item, index) => new CollectionViewItemChat
+			_chats.AddRange(chats.Select((item, index) => new CollectionViewItemChat
 			{
 				Item = item,
 				ItemIndex = index,
-				ItemCount = count
+				ItemCount = count,
 			}));
 
-			FavoriteChats.Clear();
+			_favoriteChats.Clear();
 
 			var favoriteChats = _allChats.Where(n => n.IsFavorite == true).OrderByDescending(n => n.LastMessage?.SendOn);
 			var countFavoriteChats = favoriteChats.Count();
 
-			FavoriteChats.AddRange(favoriteChats.Select((item, index) => new CollectionViewItemChat
+			_favoriteChats.AddRange(favoriteChats.Select((item, index) => new CollectionViewItemChat
 			{
 				Item = item,
 				ItemIndex = index,
-				ItemCount = countFavoriteChats
+				ItemCount = countFavoriteChats,
 			}));
 
 			OnIsFavoriteChatsChanged(IsFavoriteChats);
 		}
 
+		public void MakeChatReaded(int chatId)
+		{
+			var chat = _allChats.FirstOrDefault(n => n.Id == chatId);
+			if (chat is { })
+			{
+				chat.CountMessagesThatHaveNotBeenRead = 0;
+				RefreshChats();
+			}
+		}
+
 		public bool IsItInTheChat(LoggedInUserDto dto) =>
-			Chats.Any(n => n.Item.WithUser.Id == dto.Id);
+			_chats.Any(n => n.Item.WithUser.Id == dto.Id);
 
 		public void SetFavoriteMode() => IsFavoriteChats = true;
 		public void RemoveFavoriteMode() => IsFavoriteChats = false;
@@ -162,6 +172,10 @@
 				return;
 
 			chat.LastMessage = dto;
+			if (dto.UserId != AuthService.User!.Id)
+			{
+				chat.CountMessagesThatHaveNotBeenRead++;
+			}
 
 			RefreshChats();
 		}

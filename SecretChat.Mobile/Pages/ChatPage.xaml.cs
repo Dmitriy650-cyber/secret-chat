@@ -12,6 +12,7 @@ public partial class ChatPage : BaseView<ChatViewModel>
 	private void DisappearingAction(object? sender, EventArgs e)
 	{
 		ViewModel.RemoveHandlers();
+		ViewModel.MakeMessagesReaded();
 	}
 
 	private void InitializeAction(object? sender, EventArgs e)
