@@ -14,6 +14,8 @@
 - Entity Framework Core для ORM
 - JWT авторизация
 
+## Скриншот
+
 ![image alt](https://github.com/Dmitriy650-cyber/secret-chat/blob/master/image.jpg?raw=true)
 
 ## Требования
