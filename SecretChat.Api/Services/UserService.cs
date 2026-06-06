@@ -74,7 +74,7 @@
 				{
 					contact.PhotoUrl = context.Photos
 						.AsNoTracking()
-						.FirstOrDefault(n => n.Id == contact.Id && n.IsMain)?.PhotoUrl;
+						.FirstOrDefault(n => n.UserId == contact.Id && n.IsMain)?.PhotoUrl;
 				}
 
 				return ApiResult<IEnumerable<LoggedInUserDto>>.Success(contacts);
@@ -97,7 +97,7 @@
 				{
 					user.PhotoUrl = context.Photos
 						.AsNoTracking()
-						.FirstOrDefault(n => n.Id == user.Id && n.IsMain)?.PhotoUrl;
+						.FirstOrDefault(n => n.UserId == user.Id && n.IsMain)?.PhotoUrl;
 				}
 
 				return ApiResult<IEnumerable<LoggedInUserDto>>.Success(users);

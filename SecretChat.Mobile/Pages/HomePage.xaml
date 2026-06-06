@@ -79,19 +79,19 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:CollectionViewItemChat}">
-                        <SwipeView>
+                        <SwipeView Padding="10,0,10,0">
                             <SwipeView.Triggers>
                                 <DataTrigger
                                     Binding="{Binding ItemIndex}"
                                     TargetType="SwipeView"
                                     Value="0">
-                                    <Setter Property="Margin" Value="10,60,10,0" />
+                                    <Setter Property="Margin" Value="0,60,0,0" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsLastItem}"
                                     TargetType="SwipeView"
                                     Value="True">
-                                    <Setter Property="Margin" Value="10,0,10,130" />
+                                    <Setter Property="Margin" Value="0,0,0,130" />
                                 </DataTrigger>
                             </SwipeView.Triggers>
                             <SwipeView.RightItems>

@@ -20,7 +20,7 @@
 		private bool _isShowMenu = false;
 
 		protected AuthService AuthService = authService;
-
+		
 		protected async Task ShowErrorAlertAsync(string message) =>
 			await Shell.Current.DisplayAlertAsync("Error", message, "Ok");
 		protected async Task<bool> ShowDialogAlertAsync(string title, string question) =>
